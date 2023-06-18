@@ -59,16 +59,16 @@ echo "# When running cmake directly, remember to use: --build --preset $PRESET"
 echo "#################################"
 
 # Build native.
-cmake --preset $PRESET -DCMAKE_BUILD_TYPE=RelWithAssert
+cmake --preset $PRESET -DCMAKE_BUILD_TYPE=Release -DMULTITHREADING=ON -DOMP_MULTITHREADING=ON
 cmake --build --preset $PRESET ${@/#/--target }
 
 # Install wasi-sdk.
-./scripts/install-wasi-sdk.sh
+# ./scripts/install-wasi-sdk.sh
 
 # Build WASM.
-cmake --preset wasm
-cmake --build --preset wasm
+# cmake --preset wasm
+# cmake --build --preset wasm
 
 # Build WASM with new threading.
-cmake --preset wasm-threads
-cmake --build --preset wasm-threads
+# cmake --preset wasm-threads
+# cmake --build --preset wasm-threads
