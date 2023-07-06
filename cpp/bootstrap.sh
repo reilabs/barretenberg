@@ -60,8 +60,8 @@ echo "#################################"
 
 if [ $PRESET == homebrew ]; then
   echo "Settings for homebrew build"
-  target_compile_definitions(homebrew PRIVATE HAVE_THREAD_SAFETY_ATTRIBUTES=0)
-  target_compile_definitions(homebrew PRIVATE HAVE_STD_REGEX=0)
+  target_compile_definitions($PRESET ${@/#/--target } PRIVATE HAVE_THREAD_SAFETY_ATTRIBUTES=0)
+  target_compile_definitions($PRESET ${@/#/--target } PRIVATE HAVE_STD_REGEX=0)
 fi
 
 
