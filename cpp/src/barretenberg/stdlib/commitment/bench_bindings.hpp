@@ -8,3 +8,5 @@ using namespace stdlib::types;
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory();
 
 Composer* create_composer(int circuit_size);
+
+proof commit(UltraPlonkComposer* composer);
