@@ -113,6 +113,7 @@ add_library(
     $<TARGET_OBJECTS:stdlib_primitives_objects>
     $<TARGET_OBJECTS:stdlib_schnorr_objects>
     $<TARGET_OBJECTS:stdlib_sha256_objects>
+    $<TARGET_OBJECTS:stdlib_ffi_bindings_objects>
     $<TARGET_OBJECTS:transcript_objects>
 )
 
