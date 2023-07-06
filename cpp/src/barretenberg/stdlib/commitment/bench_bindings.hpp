@@ -6,9 +6,9 @@ using namespace proof_system::plonk;
 using namespace stdlib::types;
 
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory();
-void build_circuit(UltraPlonkComposer& composer, int circuit_size);
+void build_circuit(UltraPlonkComposer& composer, size_t circuit_size);
 
 extern "C" {
-Composer* create_composer(int circuit_size);
+Composer* create_composer(size_t circuit_size);
 void commit(UltraPlonkComposer* composer);
 }

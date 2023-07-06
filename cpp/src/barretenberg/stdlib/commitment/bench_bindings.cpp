@@ -12,7 +12,7 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
     return get_crs_factory();
 }
 
-void build_circuit(UltraPlonkComposer& composer, int circuit_size)
+void build_circuit(UltraPlonkComposer& composer, size_t circuit_size)
 {
     while (composer.get_num_gates() <= circuit_size / 2) {
         plonk::stdlib::pedersen_commitment<UltraPlonkComposer>::compress(field_ct(witness_ct(&composer, 1)),
@@ -22,7 +22,7 @@ void build_circuit(UltraPlonkComposer& composer, int circuit_size)
 
 extern "C" {
 
-UltraPlonkComposer* create_composer(int circuit_size)
+UltraPlonkComposer* create_composer(size_t circuit_size)
 {
     auto composer = std::make_unique<UltraPlonkComposer>(create_prover_factory());
     build_circuit(*composer, circuit_size);
