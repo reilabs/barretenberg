@@ -6,6 +6,20 @@
 
 using namespace barretenberg::srs;
 
+// this might fail if global crs is not initialized somewhere
+std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory()
+{
+    return get_crs_factory();
+}
+
+void build_circuit(UltraPlonkComposer& composer, int circuit_size)
+{
+    while (composer.get_num_gates() <= circuit_size / 2) {
+        plonk::stdlib::pedersen_commitment<UltraPlonkComposer>::compress(field_ct(witness_ct(&composer, 1)),
+                                                                         field_ct(witness_ct(&composer, 1)));
+    }
+}
+
 extern "C" {
 
 UltraPlonkComposer* create_composer(int circuit_size)
@@ -23,7 +37,7 @@ UltraPlonkComposer* create_composer(int circuit_size)
     return composer.release();
 }
 
-proof commit(UltraPlonkComposer* composer)
+void commit(UltraPlonkComposer* composer)
 {
     plonk::stdlib::field_t<plonk::UltraPlonkComposer> left(
         plonk::stdlib::witness_t(composer, barretenberg::fr::random_element()));
@@ -33,18 +47,4 @@ proof commit(UltraPlonkComposer* composer)
     // allegedly compress is same as commit, or so i'm ment to believe
     out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(left, out);
 }
-}
-
-// this might fail if global crs is not initialized somewhere
-std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory()
-{
-    return get_crs_factory();
-}
-
-void build_circuit(UltraPlonkComposer& composer, int circuit_size)
-{
-    while (composer.get_num_gates() <= circuit_size / 2) {
-        plonk::stdlib::pedersen_commitment<UltraPlonkComposer>::compress(field_ct(witness_ct(&composer, 1)),
-                                                                         field_ct(witness_ct(&composer, 1)));
-    }
 }
