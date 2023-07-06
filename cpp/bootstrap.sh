@@ -59,7 +59,7 @@ echo "# When running cmake directly, remember to use: --build --preset $PRESET"
 echo "#################################"
 
 # Build native.
-cmake --preset $PRESET -DCMAKE_BUILD_TYPE=Release -DMULTITHREADING=OFF -DOMP_MULTITHREADING=OFF -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchains/ios.cmake -DPLATFORM=OS64
+cmake --preset $PRESET -DCMAKE_BUILD_TYPE=Release -DMULTITHREADING=OFF -DOMP_MULTITHREADING=OFF -DCOMPILER_RT_ENABLE_IOS=On -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchains/ios.cmake -DPLATFORM=OS64
 cmake --build --preset $PRESET ${@/#/--target }
 
 # Install wasi-sdk.
