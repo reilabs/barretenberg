@@ -60,13 +60,13 @@ echo "#################################"
 
 if [ $PRESET == homebrew ]; then
   echo "Settings for homebrew build"
-  add_compile_definitions(HAVE_THREAD_SAFETY_ATTRIBUTES=0)
-  add_compile_definitions(HAVE_STD_REGEX=0)
+  # add_compile_definitions(HAVE_THREAD_SAFETY_ATTRIBUTES=0)
+  # add_compile_definitions(HAVE_STD_REGEX=0)
 fi
 
 
 # Build native.
-cmake --preset $PRESET -DCMAKE_BUILD_TYPE=Release -DMULTITHREADING=OFF -DOMP_MULTITHREADING=OFF -DCOMPILER_RT_ENABLE_IOS=On -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchains/ios.cmake -DPLATFORM=OS64
+cmake --preset $PRESET -DCMAKE_BUILD_TYPE=Release -DMULTITHREADING=OFF -DHAVE_THREAD_SAFETY_ATTRIBUTES=0 -DHAVE_STD_REGEX=0 -DOMP_MULTITHREADING=OFF -DCOMPILER_RT_ENABLE_IOS=On -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchains/ios.cmake -DPLATFORM=OS64
 cmake --build --preset $PRESET ${@/#/--target }
 
 # Install wasi-sdk.
