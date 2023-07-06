@@ -1,1 +1,2 @@
+barretenberg_module(stdlib_ffi_bindings crypto_pedersen_commitment stdlib_primitives)
 add_subdirectory(pedersen)
