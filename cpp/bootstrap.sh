@@ -58,8 +58,12 @@ echo "# Building with preset: $PRESET"
 echo "# When running cmake directly, remember to use: --build --preset $PRESET"
 echo "#################################"
 
-set(HAVE_THREAD_SAFETY_ATTRIBUTES 0)
-set(HAVE_STD_REGEX 0)
+if [ $PRESET == homebrew ]; then
+  echo "Settings for homebrew build"
+  target_compile_definitions(homebrew PRIVATE HAVE_THREAD_SAFETY_ATTRIBUTES=0)
+  target_compile_definitions(homebrew PRIVATE HAVE_STD_REGEX=0)
+fi
+
 
 # Build native.
 cmake --preset $PRESET -DCMAKE_BUILD_TYPE=Release -DMULTITHREADING=OFF -DOMP_MULTITHREADING=OFF -DCOMPILER_RT_ENABLE_IOS=On -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchains/ios.cmake -DPLATFORM=OS64
