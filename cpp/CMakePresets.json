@@ -26,7 +26,7 @@
       "environment": {
         "CC": "$env{BREW_PREFIX}/opt/llvm/bin/clang",
         "CXX": "$env{BREW_PREFIX}/opt/llvm/bin/clang++",
-        "LDFLAGS": "-L$env{BREW_PREFIX}/opt/libomp/lib",
+        "LDFLAGS": "-L$env{BREW_PREFIX}/opt/libomp/lib -lrt",
         "CPPFLAGS": "-I$env{BREW_PREFIX}/opt/libomp/include"
       }
     },
