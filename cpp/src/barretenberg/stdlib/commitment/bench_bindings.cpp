@@ -8,7 +8,7 @@ using namespace barretenberg::srs;
 
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory()
 {
-    init_crs_factory("../../srs_db/ignition");
+    init_crs_factory("../vendor-barretenberg/cpp/srs_db/ignition");
     return get_crs_factory();
 }
 
