@@ -6,9 +6,9 @@
 
 using namespace barretenberg::srs;
 
-// this might fail if global crs is not initialized somewhere
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory()
 {
+    init_crs_factory("../srs_db/ignition");
     return get_crs_factory();
 }
 
