@@ -58,12 +58,6 @@ echo "# Building with preset: $PRESET"
 echo "# When running cmake directly, remember to use: --build --preset $PRESET"
 echo "#################################"
 
-if [ $PRESET == homebrew ]; then
-  echo "Settings for homebrew build"
-  # add_compile_definitions(HAVE_THREAD_SAFETY_ATTRIBUTES=0)
-  # add_compile_definitions(HAVE_STD_REGEX=0)
-fi
-
 ADDED_FLAGS="-DHAVE_THREAD_SAFETY_ATTRIBUTES=0 -DHAVE_STD_REGEX=0 -DHAVE_POSIX_REGEX=0 -DHAVE_STEADY_CLOCK=0 -DTESTING=0"
 
 # Build native.
