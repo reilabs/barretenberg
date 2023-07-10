@@ -529,7 +529,7 @@ endif()
 if(NOT DEFINED ENABLE_BITCODE AND NOT ARCHS MATCHES "((^|;|, )(i386|x86_64))+")
   # Unless specified, enable bitcode support by default
   message(STATUS "[DEFAULTS] Enabling bitcode support by default. ENABLE_BITCODE not provided!")
-  set(ENABLE_BITCODE ON)
+  set(ENABLE_BITCODE OFF)
 elseif(NOT DEFINED ENABLE_BITCODE)
   message(STATUS "[DEFAULTS] Disabling bitcode support by default on simulators. ENABLE_BITCODE not provided for override!")
   set(ENABLE_BITCODE OFF)
