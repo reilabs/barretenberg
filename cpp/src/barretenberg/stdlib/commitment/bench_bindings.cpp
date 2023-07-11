@@ -6,19 +6,15 @@
 
 using namespace barretenberg::srs;
 
-std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(size_t num_of_elements)
+std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory()
 {
-
     auto g2_point = barretenberg::g2::one * barretenberg::fr::random_element();
 
     auto g1_points = new std::vector<barretenberg::g1::affine_element>();
 
-    // create crs points
-    for (size_t i = 0; i < num_of_elements; i++) {
-        auto scalar = barretenberg::fr::random_element();
-        const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
-        g1_points->emplace_back(element);
-    }
+    auto scalar = barretenberg::fr::random_element();
+    const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
+    g1_points->emplace_back(element);
 
     init_crs_factory(*g1_points, g2_point);
     return get_crs_factory();
@@ -49,14 +45,17 @@ UltraPlonkComposer* create_composer(size_t circuit_size)
     return composer.release();
 }
 
-void commit(UltraPlonkComposer* composer)
+void commit(UltraPlonkComposer* composer, size_t length)
 {
-    plonk::stdlib::field_t<plonk::UltraPlonkComposer> left(
-        plonk::stdlib::witness_t(composer, barretenberg::fr::random_element()));
-    plonk::stdlib::field_t<plonk::UltraPlonkComposer> out(
-        plonk::stdlib::witness_t(composer, barretenberg::fr::random_element()));
+
+    auto fields = std::vector<plonk::stdlib::field_t<plonk::UltraPlonkComposer>>();
+
+    for (size_t i = 0; i < length; i++) {
+        fields.emplace_back(plonk::stdlib::field_t<plonk::UltraPlonkComposer>(
+            plonk::stdlib::witness_t(composer, barretenberg::fr::random_element())));
+    }
 
     // allegedly compress is same as commit, or so i'm ment to believe
-    out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(left, out);
+    auto out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(fields);
 }
 }

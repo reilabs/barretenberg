@@ -9,6 +9,6 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
 void build_circuit(UltraPlonkComposer& composer, size_t circuit_size);
 
 extern "C" {
-Composer* create_composer(int circuit_size);
-void commit(UltraPlonkComposer* composer);
+UltraPlonkComposer* create_composer(int circuit_size);
+void commit(UltraPlonkComposer* composer, size_t length);
 }
