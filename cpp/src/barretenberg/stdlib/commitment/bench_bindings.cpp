@@ -48,7 +48,7 @@ UltraPlonkComposer* create_composer(size_t circuit_size)
 void commit(UltraPlonkComposer* composer, size_t length)
 {
 
-    auto fields = std::vector<plonk::stdlib::field_t<plonk::UltraPlonkComposer>>();
+    auto fields = new std::vector<plonk::stdlib::field_t<plonk::UltraPlonkComposer>>(length);
 
     for (size_t i = 0; i < length; i++) {
         fields.emplace_back(plonk::stdlib::field_t<plonk::UltraPlonkComposer>(
