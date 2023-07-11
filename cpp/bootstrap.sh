@@ -61,7 +61,7 @@ echo "#################################"
 ADDED_FLAGS="-DHAVE_THREAD_SAFETY_ATTRIBUTES=0 -DHAVE_STD_REGEX=0 -DHAVE_POSIX_REGEX=0 -DHAVE_STEADY_CLOCK=0 -DTESTING=0"
 
 # Build native.
-cmake --preset $PRESET -DCMAKE_BUILD_TYPE=Release -DMULTITHREADING=OFF $ADDED_FLAGS -DOMP_MULTITHREADING=OFF  -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchains/ios.cmake -DPLATFORM=OS64
+cmake --preset $PRESET -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTITHREADING=ON $ADDED_FLAGS -DOMP_MULTITHREADING=OFF  -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchains/ios.cmake -DPLATFORM=OS64
 cmake --build --preset $PRESET ${@/#/--target }
 
 # Install wasi-sdk.
