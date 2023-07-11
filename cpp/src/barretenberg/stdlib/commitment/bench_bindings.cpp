@@ -22,7 +22,7 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
 
 void build_circuit(UltraPlonkComposer& composer, size_t circuit_size)
 {
-    while (composer.get_num_gates() <= circuit_size / 2) {
+    while (composer.get_num_gates() <= (1 << circuit_size) / 2) {
         plonk::stdlib::pedersen_commitment<UltraPlonkComposer>::compress(field_ct(witness_ct(&composer, 1)),
                                                                          field_ct(witness_ct(&composer, 1)));
     }
