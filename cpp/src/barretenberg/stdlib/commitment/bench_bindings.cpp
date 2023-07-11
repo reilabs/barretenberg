@@ -32,7 +32,7 @@ extern "C" {
 
 UltraPlonkComposer* create_composer(size_t circuit_size)
 {
-    auto composer = std::make_unique<UltraPlonkComposer>(create_prover_factory(circuit_size));
+    auto composer = std::make_unique<UltraPlonkComposer>(create_prover_factory());
     build_circuit(*composer, circuit_size);
 
     if (composer->failed()) {

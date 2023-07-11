@@ -5,7 +5,7 @@
 using namespace proof_system::plonk;
 using namespace stdlib::types;
 
-std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(size_t num_of_elements);
+std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory();
 void build_circuit(UltraPlonkComposer& composer, size_t circuit_size);
 
 extern "C" {
