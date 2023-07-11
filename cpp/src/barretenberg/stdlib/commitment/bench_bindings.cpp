@@ -48,19 +48,20 @@ UltraPlonkComposer* create_composer(size_t circuit_size)
 void commit(UltraPlonkComposer* composer, size_t length)
 {
 
-    std::vector<plonk::stdlib::field_t<plonk::UltraPlonkComposer>> fields;
+    auto fields = new std::vector<plonk::stdlib::field_t<plonk::UltraPlonkComposer>>();
 
     std::cout << "hello 1" << std::endl;
 
     for (size_t i = 0; i < length; i++) {
-        fields.push_back(plonk::stdlib::field_t<plonk::UltraPlonkComposer>(
+        fields->push_back(plonk::stdlib::field_t<plonk::UltraPlonkComposer>(
             plonk::stdlib::witness_t(composer, barretenberg::fr::random_element())));
     }
 
     std::cout << "hello 2" << std::endl;
 
     // allegedly compress is same as commit, or so i'm ment to believe
-    auto out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(fields);
+    auto out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(*fields);
+    delete fields;
 }
 }
 
