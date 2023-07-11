@@ -57,6 +57,8 @@ void commit(UltraPlonkComposer* composer, size_t length)
 
     // allegedly compress is same as commit, or so i'm ment to believe
     proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(*fields);
+
+    std::cout << composer->get_total_circuit_size() << std::endl;
     delete fields;
 }
 }
