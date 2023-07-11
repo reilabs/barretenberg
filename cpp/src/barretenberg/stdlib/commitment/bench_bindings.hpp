@@ -11,4 +11,5 @@ void build_circuit(UltraPlonkComposer& composer, size_t circuit_size);
 extern "C" {
 UltraPlonkComposer* create_composer(size_t circuit_size);
 void commit(UltraPlonkComposer* composer, size_t length);
+void free_composer(UltraPlonkComposer* composer);
 }
