@@ -10,13 +10,13 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
 {
     auto g2_point = barretenberg::g2::one * barretenberg::fr::random_element();
 
-    auto g1_points = new std::vector<barretenberg::g1::affine_element>();
+    std::vector<barretenberg::g1::affine_element> g1_points;
 
     auto scalar = barretenberg::fr::random_element();
     const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
-    g1_points->emplace_back(element);
+    g1_points.push_back(element);
 
-    init_crs_factory(*g1_points, g2_point);
+    init_crs_factory(g1_points, g2_point);
     return get_crs_factory();
 }
 
@@ -50,17 +50,13 @@ void commit(UltraPlonkComposer* composer, size_t length)
 
     auto fields = new std::vector<plonk::stdlib::field_t<plonk::UltraPlonkComposer>>();
 
-    std::cout << "hello 1" << std::endl;
-
     for (size_t i = 0; i < length; i++) {
         fields->push_back(plonk::stdlib::field_t<plonk::UltraPlonkComposer>(
             plonk::stdlib::witness_t(composer, barretenberg::fr::random_element())));
     }
 
-    std::cout << "hello 2" << std::endl;
-
     // allegedly compress is same as commit, or so i'm ment to believe
-    auto out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(*fields);
+    proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(*fields);
     delete fields;
 }
 }
