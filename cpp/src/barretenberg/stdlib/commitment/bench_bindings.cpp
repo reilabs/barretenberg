@@ -9,12 +9,12 @@ using namespace barretenberg::srs;
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(size_t num_of_elements)
 {
 
-    barretenberg::g2::affine_element g2_point = barretenberg::g2::derive_generators<1>()[0];
+    auto g2_point = barretenberg::g2::one * barretenberg::fr::random_element();
 
     auto g1_points = new std::vector<barretenberg::g1::affine_element>();
 
     // create crs points
-    for (auto i = 0; i < num_of_elements; i++) {
+    for (size_t i = 0; i < num_of_elements; i++) {
         auto scalar = barretenberg::fr::random_element();
         const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
         g1_points->emplace_back(element);
@@ -23,6 +23,7 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
     init_crs_factory(*g1_points, g2_point);
     return get_crs_factory();
 }
+
 void build_circuit(UltraPlonkComposer& composer, size_t circuit_size)
 {
     while (composer.get_num_gates() <= circuit_size / 2) {
@@ -35,7 +36,7 @@ extern "C" {
 
 UltraPlonkComposer* create_composer(size_t circuit_size)
 {
-    auto composer = std::make_unique<UltraPlonkComposer>(create_prover_factory(1 << circuit_size));
+    auto composer = std::make_unique<UltraPlonkComposer>(create_prover_factory(circuit_size));
     build_circuit(*composer, circuit_size);
 
     if (composer->failed()) {
