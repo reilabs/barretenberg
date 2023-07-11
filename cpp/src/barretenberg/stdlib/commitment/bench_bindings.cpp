@@ -56,6 +56,6 @@ void commit(UltraPlonkComposer* composer, size_t length)
     }
 
     // allegedly compress is same as commit, or so i'm ment to believe
-    auto out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(fields);
+    auto out = proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(*fields);
 }
 }
