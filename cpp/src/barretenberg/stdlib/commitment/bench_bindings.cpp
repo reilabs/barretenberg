@@ -23,8 +23,7 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
 
 barretenberg::polynomial* br_fr_to_poly(std::vector<barretenberg::fr>* input)
 {
-    barretenberg::polynomial* coeffs;
-    std::move(input->begin(), input->end(), coeffs);
+    barretenberg::polynomial* coeffs = new barretenberg::Polynomial<barretenberg::fr>(*input);
 
     delete input;
     return coeffs;
