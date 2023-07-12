@@ -8,9 +8,13 @@ using namespace stdlib::types;
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory();
 
 extern "C" {
-barretenberg::polynomial create_input(size_t exponent);
+std::vector<barretenberg::fr>* create_input(size_t exponent);
 std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> create_prover_crs(size_t n);
 void commit(barretenberg::polynomial input,
             size_t n,
             std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> crs);
+void free(void* ptr)
+{
+    delete ptr;
+}
 }

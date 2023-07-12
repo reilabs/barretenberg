@@ -21,17 +21,26 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
     return get_crs_factory();
 }
 
+barretenberg::polynomial br_fr_to_poly(std::vector<barretenberg::fr>* input)
+{
+    barretenberg::polynomial coeffs;
+    std::move(input->begin(), input->end(), coeffs);
+
+    delete input;
+    return coeffs;
+}
+
 extern "C" {
 
-barretenberg::polynomial create_input(size_t exponent)
+std::vector<barretenberg::fr>* create_input(size_t exponent)
 {
     size_t n = 1 << exponent;
-    auto coeffs = polynomial(n + 1);
+    auto elements = new std::vector<barretenberg::fr>();
     for (size_t i = 0; i < n; ++i) {
-        coeffs[i] = barretenberg::fr::random_element();
+        elements->push_back(barretenberg::fr::random_element());
     }
 
-    return coeffs;
+    return elements;
 }
 
 std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> create_prover_crs(size_t n)
@@ -40,17 +49,25 @@ std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> create_pr
     return prover_crs->get_prover_crs(n);
 }
 
-void commit(barretenberg::polynomial input,
+void commit(std::vector<barretenberg::fr>* input,
             size_t n,
             std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> crs)
 {
+
+    auto coeffs = br_fr_to_poly(input);
+
     transcript::StandardTranscript inp_tx = transcript::StandardTranscript(transcript::Manifest());
     plonk::KateCommitmentScheme<turbo_settings> newKate;
 
     auto circuit_proving_key = std::make_shared<proving_key>(n, 0, crs, ComposerType::STANDARD);
     work_queue queue(circuit_proving_key.get(), &inp_tx);
 
-    newKate.commit(input.data(), "F_COMM", n, queue);
+    newKate.commit(coeffs.data(), "F_COMM", n, queue);
     queue.process_queue();
+}
+
+void free(void* ptr)
+{
+    delete ptr;
 }
 }
