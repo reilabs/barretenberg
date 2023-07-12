@@ -51,7 +51,7 @@ barretenberg::srs::factories::ProverCrs<curve::BN254>* create_prover_crs(size_t 
 void commit(std::vector<barretenberg::fr>* input, size_t n, barretenberg::srs::factories::ProverCrs<curve::BN254>* crs)
 {
 
-    std::shared_ptr<barretenberg::polynomial> coeffs(br_fr_to_poly(input));
+    auto coeffs = std::make_shared<barretenberg::polynomial>(br_fr_to_poly(input));
 
     transcript::StandardTranscript inp_tx = transcript::StandardTranscript(transcript::Manifest());
     plonk::KateCommitmentScheme<turbo_settings> newKate;
