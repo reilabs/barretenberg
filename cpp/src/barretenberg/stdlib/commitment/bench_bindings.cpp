@@ -30,7 +30,7 @@ class MemProverCrs : public srs::factories::ProverCrs<curve::BN254> {
     std::shared_ptr<barretenberg::g1::affine_element[]> monomials_;
 };
 
-srs::factories::MemCrsFactory create_prover_factory()
+srs::factories::MemCrsFactory* create_prover_factory()
 {
     auto g2_point = barretenberg::g2::one * barretenberg::fr::random_element();
 
@@ -40,14 +40,13 @@ srs::factories::MemCrsFactory create_prover_factory()
     const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
     g1_points.push_back(element);
 
-    return srs::factories::MemCrsFactory(g1_points, g2_point);
+    return &srs::factories::MemCrsFactory(g1_points, g2_point);
 }
 
-barretenberg::polynomial* br_fr_to_poly(std::vector<barretenberg::fr>* input)
+barretenberg::polynomial* br_fr_to_poly(std::vector<barretenberg::fr>& input)
 {
-    barretenberg::polynomial* coeffs = new barretenberg::Polynomial<barretenberg::fr>(*input);
+    barretenberg::polynomial* coeffs = new barretenberg::Polynomial<barretenberg::fr>(input);
 
-    delete input;
     return coeffs;
 }
 
@@ -68,8 +67,8 @@ void commit(std::vector<barretenberg::fr>* input, size_t n)
 {
 
     auto prover_factory = create_prover_factory();
-    auto crs = prover_factory.get_prover_crs(n);
-    auto coeffs = br_fr_to_poly(input);
+    auto crs = prover_factory->get_prover_crs(n);
+    auto coeffs = br_fr_to_poly(*input);
 
     transcript::StandardTranscript inp_tx = transcript::StandardTranscript(transcript::Manifest());
     plonk::KateCommitmentScheme<turbo_settings> newKate;
@@ -80,5 +79,6 @@ void commit(std::vector<barretenberg::fr>* input, size_t n)
     newKate.commit(coeffs->data(), "F_COMM", n, queue);
     queue.process_queue();
     delete coeffs;
+    delete input;
 }
 }
