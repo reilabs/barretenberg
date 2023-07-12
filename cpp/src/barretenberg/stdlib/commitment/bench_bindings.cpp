@@ -40,7 +40,7 @@ srs::factories::MemCrsFactory* create_prover_factory()
     const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
     g1_points.push_back(element);
 
-    return &srs::factories::MemCrsFactory(g1_points, g2_point);
+    return new srs::factories::MemCrsFactory(g1_points, g2_point);
 }
 
 barretenberg::polynomial* br_fr_to_poly(std::vector<barretenberg::fr>& input)
