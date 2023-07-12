@@ -5,6 +5,7 @@
 #include <barretenberg/srs/global_crs.hpp>
 
 using namespace barretenberg::srs;
+using namespace grumpkin;
 
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory()
 {
@@ -48,17 +49,14 @@ UltraPlonkComposer* create_composer(size_t circuit_size)
 void commit(UltraPlonkComposer* composer, size_t length)
 {
 
-    auto fields = new std::vector<plonk::stdlib::field_t<plonk::UltraPlonkComposer>>();
+    auto fields = new std::vector<grumpkin::fq>();
 
     for (size_t i = 0; i < length; i++) {
-        fields->push_back(plonk::stdlib::field_t<plonk::UltraPlonkComposer>(
-            plonk::stdlib::witness_t(composer, barretenberg::fr::random_element())));
+        fields->push_back(grumpkin::fq::random_element());
     }
 
-    // allegedly compress is same as commit, or so i'm ment to believe
-    proof_system::plonk::stdlib::pedersen_commitment<plonk::UltraPlonkComposer>::compress(*fields);
+    crypto::pedersen_commitment::commit_native(*fields);
 
-    std::cout << composer->get_total_circuit_size() << std::endl;
     delete fields;
 }
 }
