@@ -6,13 +6,12 @@
 using namespace proof_system::plonk;
 using namespace stdlib::types;
 
-std::shared_ptr<srs::factories::MemCrsFactory> create_prover_factory();
+srs::factories::MemCrsFactory create_prover_factory();
 
 extern "C" {
 std::vector<barretenberg::fr>* create_input(size_t exponent);
-barretenberg::srs::factories::ProverCrs<curve::BN254>* create_prover_crs(size_t n);
-void commit(std::vector<barretenberg::fr>* input, size_t n, barretenberg::srs::factories::ProverCrs<curve::BN254>* crs);
-void free_crs(barretenberg::srs::factories::ProverCrs<curve::BN254>* ptr)
+void commit(std::vector<barretenberg::fr>* input, size_t n);
+void free_crs(srs::factories::MemCrsFactory* ptr)
 {
     delete ptr;
 }
