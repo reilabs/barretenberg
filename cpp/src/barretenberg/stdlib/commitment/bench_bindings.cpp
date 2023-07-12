@@ -36,9 +36,11 @@ srs::factories::MemCrsFactory* create_prover_factory()
 
     std::vector<barretenberg::g1::affine_element> g1_points;
 
-    auto scalar = barretenberg::fr::random_element();
-    const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
-    g1_points.push_back(element);
+    for (int i = 0; i < 4; i++) {
+        auto scalar = barretenberg::fr::random_element();
+        const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
+        g1_points.push_back(element);
+    }
 
     return new srs::factories::MemCrsFactory(g1_points, g2_point);
 }
