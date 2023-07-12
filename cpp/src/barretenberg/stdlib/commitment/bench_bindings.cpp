@@ -43,15 +43,13 @@ std::vector<barretenberg::fr>* create_input(size_t exponent)
     return elements;
 }
 
-std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> create_prover_crs(size_t n)
+barretenberg::srs::factories::ProverCrs<curve::BN254>* create_prover_crs(size_t n)
 {
     auto prover_crs = create_prover_factory();
-    return prover_crs->get_prover_crs(n);
+    return prover_crs->get_prover_crs(n).get();
 }
 
-void commit(std::vector<barretenberg::fr>* input,
-            size_t n,
-            std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> crs)
+void commit(std::vector<barretenberg::fr>* input, size_t n, barretenberg::srs::factories::ProverCrs<curve::BN254>* crs)
 {
 
     auto coeffs = br_fr_to_poly(input);
