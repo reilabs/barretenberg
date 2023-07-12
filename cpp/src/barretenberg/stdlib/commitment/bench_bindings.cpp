@@ -63,9 +63,4 @@ void commit(std::vector<barretenberg::fr>* input, size_t n, barretenberg::srs::f
     newKate.commit(coeffs.data(), "F_COMM", n, queue);
     queue.process_queue();
 }
-
-void free(void* ptr)
-{
-    delete ptr;
-}
 }

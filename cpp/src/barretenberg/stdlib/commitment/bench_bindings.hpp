@@ -11,7 +11,7 @@ extern "C" {
 std::vector<barretenberg::fr>* create_input(size_t exponent);
 barretenberg::srs::factories::ProverCrs<curve::BN254>* create_prover_crs(size_t n);
 void commit(barretenberg::polynomial input, size_t n, barretenberg::srs::factories::ProverCrs<curve::BN254>* crs);
-void free(void* ptr)
+void free_crs(barretenberg::srs::factories::ProverCrs<curve::BN254>* ptr)
 {
     delete ptr;
 }
