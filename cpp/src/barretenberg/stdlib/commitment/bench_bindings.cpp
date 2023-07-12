@@ -50,13 +50,16 @@ barretenberg::srs::factories::ProverCrs<curve::BN254>* create_prover_crs(size_t 
 void commit(std::vector<barretenberg::fr>* input, size_t n, barretenberg::srs::factories::ProverCrs<curve::BN254>* crs)
 {
 
+    auto prover_crs = create_prover_factory();
+    auto krsina = prover_crs->get_prover_crs(n);
+
     auto coeffs = br_fr_to_poly(input);
     auto crs_sp = std::make_shared<barretenberg::srs::factories::ProverCrs<curve::BN254>>(crs);
 
     transcript::StandardTranscript inp_tx = transcript::StandardTranscript(transcript::Manifest());
     plonk::KateCommitmentScheme<turbo_settings> newKate;
 
-    auto circuit_proving_key = std::make_shared<proving_key>(n, 0, crs, ComposerType::STANDARD);
+    auto circuit_proving_key = std::make_shared<proving_key>(n, 0, krsina, ComposerType::STANDARD);
     work_queue queue(circuit_proving_key.get(), &inp_tx);
 
     newKate.commit(coeffs->data(), "F_COMM", n, queue);
