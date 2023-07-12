@@ -65,10 +65,9 @@ std::vector<barretenberg::fr>* create_input(size_t exponent)
     return elements;
 }
 
-void commit(std::vector<barretenberg::fr>* input, size_t n)
+void commit(std::vector<barretenberg::fr>* input, size_t n, srs::factories::MemCrsFactory* prover_factory)
 {
 
-    auto prover_factory = create_prover_factory();
     auto crs = prover_factory->get_prover_crs(n);
     auto coeffs = br_fr_to_poly(*input);
 

@@ -11,7 +11,7 @@ using namespace stdlib::types;
 extern "C" {
 std::vector<barretenberg::fr>* create_input(size_t exponent);
 srs::factories::MemCrsFactory* create_prover_factory();
-void commit(std::vector<barretenberg::fr>* input, size_t n);
+void commit(std::vector<barretenberg::fr>* input, size_t n, srs::factories::MemCrsFactory* prover_factory);
 void free_crs(srs::factories::MemCrsFactory* ptr)
 {
     delete ptr;
