@@ -6,10 +6,11 @@ using namespace proof_system::plonk;
 using namespace stdlib::types;
 
 std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory();
-void build_circuit(UltraPlonkComposer& composer, size_t circuit_size);
 
 extern "C" {
-UltraPlonkComposer* create_composer(size_t circuit_size);
-void commit(UltraPlonkComposer* composer, size_t length);
-void free_composer(UltraPlonkComposer* composer);
+barretenberg::polynomial create_input(size_t exponent);
+std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> create_prover_crs(size_t n);
+void commit(barretenberg::polynomial input,
+            size_t n,
+            std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> crs);
 }

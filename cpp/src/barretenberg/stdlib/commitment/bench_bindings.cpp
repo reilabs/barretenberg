@@ -21,47 +21,36 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
     return get_crs_factory();
 }
 
-void build_circuit(UltraPlonkComposer& composer, size_t circuit_size)
-{
-    while (composer.get_num_gates() <= (1 << circuit_size) / 2) {
-        plonk::stdlib::pedersen_commitment<UltraPlonkComposer>::compress(field_ct(witness_ct(&composer, 1)),
-                                                                         field_ct(witness_ct(&composer, 1)));
-    }
-}
-
 extern "C" {
 
-UltraPlonkComposer* create_composer(size_t circuit_size)
+barretenberg::polynomial create_input(size_t exponent)
 {
-    auto composer = std::make_unique<UltraPlonkComposer>(create_prover_factory());
-    build_circuit(*composer, circuit_size);
-
-    if (composer->failed()) {
-        std::string error = format("composer logic failed: ", composer->err());
-        throw_or_abort(error);
+    size_t n = 1 << exponent;
+    auto coeffs = polynomial(n + 1);
+    for (size_t i = 0; i < n; ++i) {
+        coeffs[i] = barretenberg::fr::random_element();
     }
 
-    composer->compute_proving_key();
-
-    return composer.release();
+    return coeffs;
 }
 
-void commit(UltraPlonkComposer* composer, size_t length)
+std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> create_prover_crs(size_t n)
 {
-
-    auto fields = new std::vector<grumpkin::fq>();
-
-    for (size_t i = 0; i < length; i++) {
-        fields->push_back(grumpkin::fq::random_element());
-    }
-
-    crypto::pedersen_commitment::commit_native(*fields);
-
-    delete fields;
-}
+    auto prover_crs = create_prover_factory();
+    return prover_crs->get_prover_crs(n);
 }
 
-void free_composer(UltraPlonkComposer* composer)
+void commit(barretenberg::polynomial input,
+            size_t n,
+            std::shared_ptr<barretenberg::srs::factories::ProverCrs<curve::BN254>> crs)
 {
-    delete composer;
+    transcript::StandardTranscript inp_tx = transcript::StandardTranscript(transcript::Manifest());
+    plonk::KateCommitmentScheme<turbo_settings> newKate;
+
+    auto circuit_proving_key = std::make_shared<proving_key>(n, 0, crs, ComposerType::STANDARD);
+    work_queue queue(circuit_proving_key.get(), &inp_tx);
+
+    newKate.commit(input.data(), "F_COMM", n, queue);
+    queue.process_queue();
+}
 }
