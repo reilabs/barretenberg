@@ -7,7 +7,7 @@
 using namespace barretenberg::srs;
 using namespace grumpkin;
 
-std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory()
+std::shared_ptr<srs::factories::MemCrsFactory> create_prover_factory()
 {
     auto g2_point = barretenberg::g2::one * barretenberg::fr::random_element();
 
@@ -17,8 +17,7 @@ std::shared_ptr<barretenberg::srs::factories::CrsFactory> create_prover_factory(
     const auto element = barretenberg::g1::affine_element(barretenberg::g1::one * scalar);
     g1_points.push_back(element);
 
-    init_crs_factory(g1_points, g2_point);
-    return get_crs_factory();
+    return std::make_shared<srs::factories::MemCrsFactory>(srs::factories::MemCrsFactory(g1_points, g2_point));
 }
 
 barretenberg::polynomial* br_fr_to_poly(std::vector<barretenberg::fr>* input)
