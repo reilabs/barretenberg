@@ -131,6 +131,11 @@ if(COVERAGE)
     )
 endif()
 
+set(CMAKE_C_COMPILER "/opt/homebrew/Cellar/llvm/16.0.6/bin/clang")
+set(CMAKE_CXX_COMPILER "/opt/homebrew/Cellar/llvm/16.0.6/bin/clang++")
+set(OPENMP_LIBRARIES "/opt/homebrew/Cellar/llvm/16.0.6/lib")
+set(OPENMP_INCLUDES "/opt/homebrew/Cellar/llvm/16.0.6/include")
+
 
 include(cmake/build.cmake)
 include(GNUInstallDirs)

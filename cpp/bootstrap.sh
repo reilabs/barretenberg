@@ -25,9 +25,9 @@ else
 fi
 
 # Download ignition transcripts.
-cd ./srs_db
-./download_ignition.sh 3
-cd ..
+# cd ./srs_db
+# ./download_ignition.sh 3
+# cd ..
 
 # Pick native toolchain file.
 ARCH=$(uname -m)
