@@ -46,12 +46,8 @@ if (OPENMP_FOUND)
     # set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif(OPENMP_FOUND)
 
-if(OMP_MULTITHREADING)
-    find_package(OpenMP REQUIRED)
-    
-else()
-    message(STATUS "OMP multithreading is disabled.")
-    add_definitions(-DNO_OMP_MULTITHREADING)
+if(TARGET OpenMP::OpenMP_CXX)
+    target_link_libraries(${_name} OpenMP::OpenMP_CXX)
 endif()
 
 if(DISABLE_TBB)
