@@ -80,6 +80,5 @@ void commit(std::vector<barretenberg::fr>* input, size_t n, srs::factories::MemC
     newKate.commit(coeffs->data(), "F_COMM", n, queue);
     queue.process_queue();
     delete coeffs;
-    delete input;
 }
 }

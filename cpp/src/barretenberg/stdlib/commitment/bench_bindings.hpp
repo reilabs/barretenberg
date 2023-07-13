@@ -16,4 +16,8 @@ void free_crs(srs::factories::MemCrsFactory* ptr)
 {
     delete ptr;
 }
+void free_input(td::vector<barretenberg::fr>* ptr)
+{
+    delete ptr;
+}
 }
