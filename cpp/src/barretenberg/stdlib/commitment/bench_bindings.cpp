@@ -80,6 +80,12 @@ void commit(std::vector<grumpkin::fq>* input, size_t n, srs::factories::MemCrsFa
     // queue.process_queue();
     // delete coeffs;
 
-    crypto::pedersen_commitment::compress_native(*input, 0);
+    grumpkin::fq left = grumpkin::fq::random_element();
+    grumpkin::fq out = grumpkin::fq::random_element();
+    for (size_t i = 0; i < n; ++i) {
+        out = crypto::pedersen_commitment::compress_native({ left, out });
+    }
+
+    // crypto::pedersen_commitment::compress_native(*input, 0);
 }
 }
