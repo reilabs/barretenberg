@@ -45,40 +45,41 @@ srs::factories::MemCrsFactory* create_prover_factory()
     return new srs::factories::MemCrsFactory(g1_points, g2_point);
 }
 
-barretenberg::polynomial* br_fr_to_poly(std::vector<barretenberg::fr>& input)
+constexpr size_t get_circuit_size(const size_t target_count_base)
 {
-    barretenberg::polynomial* coeffs = new barretenberg::Polynomial<barretenberg::fr>(input);
-
-    return coeffs;
+    constexpr size_t base_gates = 2;
+    constexpr size_t gates_per_hash = 262;
+    return (target_count_base - base_gates) / gates_per_hash;
 }
 
 extern "C" {
 
-std::vector<barretenberg::fr>* create_input(size_t exponent)
+std::vector<grumpkin::fq>* create_input(size_t n)
 {
-    size_t n = 1 << exponent;
-    auto elements = new std::vector<barretenberg::fr>();
+    auto elements = new std::vector<grumpkin::fq>();
     for (size_t i = 0; i < n; ++i) {
-        elements->push_back(barretenberg::fr::random_element());
+        elements->push_back(grumpkin::fq::random_element());
     }
 
     return elements;
 }
 
-void commit(std::vector<barretenberg::fr>* input, size_t n, srs::factories::MemCrsFactory* prover_factory)
+void commit(std::vector<grumpkin::fq>* input, size_t n, srs::factories::MemCrsFactory* prover_factory)
 {
 
-    auto crs = prover_factory->get_prover_crs(n);
-    auto coeffs = br_fr_to_poly(*input);
+    // auto crs = prover_factory->get_prover_crs(n);
+    // auto coeffs = br_fr_to_poly(*input);
 
-    transcript::StandardTranscript inp_tx = transcript::StandardTranscript(transcript::Manifest());
-    plonk::KateCommitmentScheme<turbo_settings> newKate;
+    // transcript::StandardTranscript inp_tx = transcript::StandardTranscript(transcript::Manifest());
+    // plonk::KateCommitmentScheme<turbo_settings> newKate;
 
-    auto circuit_proving_key = std::make_shared<proving_key>(n, 0, crs, ComposerType::STANDARD);
-    work_queue queue(circuit_proving_key.get(), &inp_tx);
+    // auto circuit_proving_key = std::make_shared<proving_key>(n, 0, crs, ComposerType::STANDARD);
+    // work_queue queue(circuit_proving_key.get(), &inp_tx);
 
-    newKate.commit(coeffs->data(), "F_COMM", n, queue);
-    queue.process_queue();
-    delete coeffs;
+    // newKate.commit(coeffs->data(), "F_COMM", n, queue);
+    // queue.process_queue();
+    // delete coeffs;
+
+    crypto::pedersen_commitment::compress_native(*input, 0);
 }
 }
